@@ -1,6 +1,4 @@
 (require 'package)
-  (push '("marmalade" . "http://marmalade-repo.org/packages/")
-        package-archives )
   (push '("melpa" . "http://melpa.milkbox.net/packages/")
         package-archives)
 	(package-initialize) ;; necessary for packages installed from melpa to be found in the load-path
@@ -81,3 +79,19 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (let (filename (file-name-sans-extension buffer-file-name))
     (setq compile-c-program (concat "c++ " (buffer-file-name) " -o " filename ".o -std=c++11 -stdlib=libc++ -Weverything -g && ./" filename ".o"))
   (shell-command compile-c-program)))
+
+;;; rename file and buffer
+(defun rename-file-and-buffer ()
+  "Rename the current buffer and file it is visiting."
+  (interactive)
+  (let ((filename (buffer-file-name)))
+    (if (not (and filename (file-exists-p filename)))
+        (message "Buffer is not visiting a file!")
+      (let ((new-name (read-file-name "New name: " filename)))
+        (cond
+         ((vc-backend filename) (vc-rename-file filename new-name))
+         (t
+          (rename-file filename new-name t)
+          (set-visited-file-name new-name t t)))))))
+
+(global-set-key (kbd "C-c r")  'rename-file-and-buffer)
