@@ -66,7 +66,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
                     ;; $(CC) -c -o $@ $(CPPFLAGS) $(CFLAGS) $<
 		    (let ((file (file-name-nondirectory buffer-file-name)))
                       (format "%s -o %s %s %s %s"
-                              (or (getenv "c++") "c++")
+			      (if (eq system-type 'windows-nt)
+				 'clang++ 
+				(or (getenv "c++") "c++"))
                               (file-name-sans-extension file)
                               (or (getenv "CPPFLAGS") "-DDEBUG=9")
                               (or (getenv "CFLAGS") "-std=c++11 -stdlib=libc++ -Weverything -g")
