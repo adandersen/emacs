@@ -1,3 +1,8 @@
+;; Required packages from melpa
+; Helm
+; Evil
+; Evil-leader
+
 (require 'package)
   (push '("melpa" . "http://melpa.milkbox.net/packages/")
         package-archives)
