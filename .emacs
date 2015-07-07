@@ -1,8 +1,9 @@
-;; Required packages from melpa
+;;;Required packages from melpa
 ; Helm
 ; Evil
 ; Evil-leader
 
+;;; packages with options
 (require 'package)
   (push '("melpa" . "http://melpa.milkbox.net/packages/")
         package-archives)
@@ -23,10 +24,13 @@
 (setq helm-quick-update t)
 (setq evil-operator-state-cursor '("blue" hollow))
 
+;;; options
 (global-set-key (kbd "M-x") 'helm-M-x)
 (desktop-save-mode 1)
 (setq compilation-auto-jump-to-first-error t)
+(setq confirm-kill-emacs 'yes-or-no-p)
 
+;;; key bindings
 (define-key evil-normal-state-map "  " 'helm-mini)
 (define-key evil-normal-state-map "\M-x" 'helm-M-x)
 (define-key evil-normal-state-map "\C-xc" 'compile)
@@ -51,7 +55,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     (abort-recursive-edit)))
 
 ;;; esc quits
-
 (define-key evil-normal-state-map [escape] 'keyboard-quit)
 (define-key evil-visual-state-map [escape] 'keyboard-quit)
 (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
@@ -60,6 +63,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
 (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
 
+;;; compile hooks
 (require 'compile)
 (add-hook 'c++-mode-hook
            (lambda ()
