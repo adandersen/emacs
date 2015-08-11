@@ -30,6 +30,26 @@
 (desktop-save-mode 1)
 (setq compilation-auto-jump-to-first-error t)
 (setq confirm-kill-emacs 'yes-or-no-p)
+(setq default-tab-width 4)
+(electric-pair-mode t)
+
+;;; Tab settings
+;Tab width is 3
+(setq tab-width 3)
+;Tab width is 3 by default..
+(setq-default tab-width 3)
+;Use tabs always.
+(setq indent-tabs-mode nil)
+;Jump by 3.
+(setq c-basic-offset 3)
+(setq c-basic-indent 3)
+;this defaulted to 4 and had to be reset to 3. 
+(setq perl-indent-level 3)
+;Tab stop list out to col 60
+;Manually set by x3
+(setq tab-stop-list '(3 6 9 12 15 18 21 24 27 30 33 36 39 42 45 48 51 54 57 60))
+
+
 
 ;;; key bindings
 (define-key evil-normal-state-map "  " 'helm-mini)
@@ -91,8 +111,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (interactive)
   (defvar foo)
   (let (filename (file-name-sans-extension buffer-file-name))
-    (setq compile-c-program (concat "c++ " (buffer-file-name) " -o " filename ".o -std=c++11 -stdlib=libc++ -Weverything -g && ./" filename ".o"))
+    (setq compile-c-program (concat "c++ " (buffer-file-name) " -o " filename ".o -std=c++11 -stdlib=libc++ -Wall -g && ./" filename ".o"))
     (shell-command compile-c-program)))
+
+(global-set-key (kbd "C-c C-r") 'execute-c++-program)
 
 ;;; rename file and buffer
 (defun rename-file-and-buffer ()
@@ -110,8 +132,13 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 (global-set-key (kbd "C-c r")  'rename-file-and-buffer)
 
+(add-hook 'c-mode-common-hook
+  (lambda() 
+    (local-set-key  (kbd "C-c o") 'ff-find-other-file)))
+
 (if (eq system-type 'windows-nt)
     (setq inferior-lisp-program "clisp.exe"))
 
 (load-theme 'monokai t)
 (menu-bar-mode -1)
+
