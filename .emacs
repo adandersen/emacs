@@ -2,24 +2,25 @@
 ; Helm
 ; Evil
 ; Evil-leader
+; monokai
 
 ;;; packages with options
 (require 'package)
   (push '("melpa" . "http://melpa.milkbox.net/packages/")
         package-archives)
-	(package-initialize) ;; necessary for packages installed from melpa to be found in the load-path
+(package-initialize) ;; necessary for packages installed from melpa to be found in the load-path
 
 (add-to-list 'load-path "~/.emacs.d/evil")
 
 (require 'evil-leader)
-    (setq evil-leader/in-all-states 1) ; activate for all states
-    (global-evil-leader-mode) ;; must be activated before evil or wont be in *Scratch* buffers or *Messages*
-    (evil-leader/set-leader "<SPC>")
+(setq evil-leader/in-all-states 1) ; activate for all states
+(global-evil-leader-mode) ;; must be activated before evil or wont be in *Scratch* buffers or *Messages*
+(evil-leader/set-leader "<SPC>")
 (require 'evil)
-    (evil-mode 1)
+(evil-mode 1)
 (require 'helm-misc)
 (require 'helm-config)
-    (helm-mode 1)
+(helm-mode 1)
 (require 'helm-locate)
 (setq helm-quick-update t)
 (setq evil-operator-state-cursor '("blue" hollow))
@@ -42,7 +43,9 @@
 (setq evil-replace-state-cursor '("blue" bar))
 (setq evil-operator-state-cursor '("blue" hollow))
 
-
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
+(setq indent-line-function 'insert-tab)
 ;;; allows quitting helm and other mini-buffers when escape is pressed
 (defun minibuffer-keyboard-quit ()
   "Abort recursive edit.
@@ -66,22 +69,22 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 ;;; compile hooks
 (require 'compile)
 (add-hook 'c++-mode-hook
-           (lambda ()
-	     (unless (file-exists-p "Makefile")
-	       (set (make-local-variable 'compile-command)
-                    ;; emulate make's .c.o implicit pattern rule, but with
-                    ;; different defaults for the CC, CPPFLAGS, and CFLAGS
-                    ;; variables:
-                    ;; $(CC) -c -o $@ $(CPPFLAGS) $(CFLAGS) $<
-		    (let ((file (file-name-nondirectory buffer-file-name)))
-                      (format "%s -o %s %s %s %s"
-			      (if (eq system-type 'windows-nt)
-				 'clang++ 
-				(or (getenv "c++") "c++"))
-                              (file-name-sans-extension file)
-                              (or (getenv "CPPFLAGS") "-DDEBUG=9")
-                              (or (getenv "CFLAGS") "-std=c++11 -stdlib=libc++ -Weverything -g")
-			      file))))))
+          (lambda ()
+            (unless (file-exists-p "Makefile")
+              (set (make-local-variable 'compile-command)
+                   ;; emulate make's .c.o implicit pattern rule, but with
+                   ;; different defaults for the CC, CPPFLAGS, and CFLAGS
+                   ;; variables:
+                   ;; $(CC) -c -o $@ $(CPPFLAGS) $(CFLAGS) $<
+                   (let ((file (file-name-nondirectory buffer-file-name)))
+                     (format "%s -o %s %s %s %s"
+                             (if (eq system-type 'windows-nt)
+                                 'clang++ 
+                               (or (getenv "c++") "c++"))
+                             (file-name-sans-extension file)
+                             (or (getenv "CPPFLAGS") "-DDEBUG=9")
+                             (or (getenv "CFLAGS") "-std=c++11 -stdlib=libc++ -Weverything -g")
+                             file))))))
 
 ;; Run C programs directly from within emacs
 (defun execute-c++-program ()
@@ -89,7 +92,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (defvar foo)
   (let (filename (file-name-sans-extension buffer-file-name))
     (setq compile-c-program (concat "c++ " (buffer-file-name) " -o " filename ".o -std=c++11 -stdlib=libc++ -Weverything -g && ./" filename ".o"))
-  (shell-command compile-c-program)))
+    (shell-command compile-c-program)))
 
 ;;; rename file and buffer
 (defun rename-file-and-buffer ()
@@ -106,3 +109,9 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
           (set-visited-file-name new-name t t)))))))
 
 (global-set-key (kbd "C-c r")  'rename-file-and-buffer)
+
+(if (eq system-type 'windows-nt)
+    (setq inferior-lisp-program "clisp.exe"))
+
+(load-theme 'monokai t)
+(menu-bar-mode -1)
