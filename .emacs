@@ -103,7 +103,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
                                (or (getenv "c++") "c++"))
                              (file-name-sans-extension file)
                              (or (getenv "CPPFLAGS") "-DDEBUG=9")
-                             (or (getenv "CFLAGS") "-std=c++11 -stdlib=libc++ -Weverything -g")
+                             (or (getenv "CFLAGS") "-std=c++11 -stdlib=libc++ -WAll -g")
                              file))))))
 
 ;; Run C programs directly from within emacs
@@ -141,4 +141,5 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 (load-theme 'monokai t)
 (menu-bar-mode -1)
+(tool-bar-mode -1)
 
