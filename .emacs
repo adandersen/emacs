@@ -23,7 +23,6 @@
 (helm-mode 1)
 (require 'helm-locate)
 (setq helm-quick-update t)
-(setq evil-operator-state-cursor '("blue" hollow))
 
 ;;; options
 (global-set-key (kbd "M-x") 'helm-M-x)
@@ -32,36 +31,38 @@
 (setq confirm-kill-emacs 'yes-or-no-p)
 (setq default-tab-width 4)
 (electric-pair-mode t)
+(load-theme 'monokai t)
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(setq evil-move-beyond-eol t)
+
 
 ;;; Tab settings
-;Tab width is 3
-(setq tab-width 3)
 ;Tab width is 3 by default..
-(setq-default tab-width 3)
+(setq-default tab-width 4)
 ;Use tabs always.
-(setq indent-tabs-mode nil)
+(setq indent-tabs-mode t)
 ;Jump by 3.
-(setq c-basic-offset 3)
-(setq c-basic-indent 3)
+(setq c-basic-offset 4)
+(setq c-basic-indent 4)
 ;this defaulted to 4 and had to be reset to 3. 
-(setq perl-indent-level 3)
+(setq perl-indent-level 4)
 ;Tab stop list out to col 60
 ;Manually set by x3
-(setq tab-stop-list '(3 6 9 12 15 18 21 24 27 30 33 36 39 42 45 48 51 54 57 60))
-
-
+(setq tab-stop-list '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60 64 68 72 76 80 84 88 92 96 100))
 
 ;;; key bindings
 (define-key evil-normal-state-map "  " 'helm-mini)
 (define-key evil-normal-state-map "\M-x" 'helm-M-x)
 (define-key evil-normal-state-map "\C-xc" 'compile)
 
-(setq evil-emacs-state-cursor '("red" box))
-(setq evil-normal-state-cursor '("green" box))
-(setq evil-visual-state-cursor '("orange" box))
-(setq evil-insert-state-cursor '("blue" bar))
-(setq evil-replace-state-cursor '("blue" bar))
-(setq evil-operator-state-cursor '("blue" hollow))
+;;; some possible colors at http://www.tayloredmktg.com/rgb/
+(setq evil-emacs-state-cursor '("tomato" box))
+(setq evil-normal-state-cursor '("lawn green" box))
+(setq evil-visual-state-cursor '("gold" box))
+(setq evil-insert-state-cursor '("deep sky blue" bar))
+(setq evil-replace-state-cursor '("deep sky blue" bar))
+(setq evil-operator-state-cursor '("steel blue" hollow))
 
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
@@ -138,8 +139,4 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 (if (eq system-type 'windows-nt)
     (setq inferior-lisp-program "clisp.exe"))
-
-(load-theme 'monokai t)
-(menu-bar-mode -1)
-(tool-bar-mode -1)
 
