@@ -35,21 +35,20 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (setq evil-move-beyond-eol t)
-
+; Don't display the ugly startup message (particularly ugly in the GUI)
+(setq inhibit-startup-message t)
 
 ;;; Tab settings
-;Tab width is 3 by default..
+;Tab width is 4 by default..
 (setq-default tab-width 4)
 ;Use tabs always.
 (setq indent-tabs-mode t)
-;Jump by 3.
+;Jump by 4.
 (setq c-basic-offset 4)
 (setq c-basic-indent 4)
-;this defaulted to 4 and had to be reset to 3. 
-(setq perl-indent-level 4)
 ;Tab stop list out to col 60
-;Manually set by x3
-(setq tab-stop-list '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60 64 68 72 76 80 84 88 92 96 100))
+;Manually set by x4
+(setq tab-stop-list '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60 64 68 72 76 80 84 88 92 96 100 104 108 112 116 120))
 
 ;;; key bindings
 (define-key evil-normal-state-map "  " 'helm-mini)
@@ -139,4 +138,54 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 (if (eq system-type 'windows-nt)
     (setq inferior-lisp-program "clisp.exe"))
+
+(define-skeleton c++-debug-cout
+  "Insert a cout << text << endl; statement"
+  > "cout << \""_"\" << endl;")
+
+;;; major mode abbreviation, shortcut, output empty text if calling a function, execute function - a skeleton in this case
+;(define-abbrev c++-mode-abbrev-table "co" "" 'c++-debug-cout)
+
+(defun save-and-compile ()
+    "saves and compiles c++ programs"
+  (interactive)
+  (save-buffer)
+  (execute-c++-program))
+
+(global-set-key (kbd "C-c c") 'save-and-compile)
+
+; setting up sbcl through homebrew, quicklisp (package manager) and slime for emacs
+;;http://gnperdue.github.io/yak-shaving/osx/lisp/2014/11/10/lisp-setup.html
+
+(if (not (eq system-type 'windows-nt))
+	(load (expand-file-name "~/quicklisp/slime-helper.el"))
+		;; Replace "sbcl" with the path to your implementation
+		(setq inferior-lisp-program "/usr/local/Cellar/sbcl/1.2.2/bin/sbcl --noinform"))
+
+;;; redefine keys in personal minor mode
+(defvar my-keys-minor-mode-map (make-keymap) "my-keys-minor-mode keymap.")
+(define-key global-map [(control ,)] ctl-x-map)
+(define-key my-keys-minor-mode-map (kbd "C-,") ctl-x-map)
+(define-key my-keys-minor-mode-map (kbd "M-,") 'execute-extended-command)
+
+;(define-minor-mode my-keys-minor-mode
+;  "A minor mode so that my key settings override annoying major modes."
+;  t " my-keys" 'my-keys-minor-mode-map)
+
+;(my-keys-minor-mode 1)
+
+;(defun my-minibuffer-setup-hook ()
+;  (my-keys-minor-mode 0))
+
+;(add-hook 'minibuffer-setup-hook 'my-minibuffer-setup-hook)
+
+
+;(defadvice load (after give-my-keybindings-priority)
+;  "Try to ensure that my keybindings always have priority."
+;  (if (not (eq (car (car minor-mode-map-alist)) 'my-keys-minor-mode))
+;      (let ((mykeys (assq 'my-keys-minor-mode minor-mode-map-alist)))
+;        (assq-delete-all 'my-keys-minor-mode minor-mode-map-alist)
+;        (add-to-list 'minor-mode-map-alist mykeys))))
+;(ad-activate 'load)
+
 
